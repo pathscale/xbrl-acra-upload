@@ -10,19 +10,28 @@ https://www.apimall.acra.gov.sg/
 
 # Dependencies
 python3 installed
+
 python3 -m pip install requests
+
 python3 -m pip install netifaces
+
+
 
 # Usage
 ./xbrl_upload.py --help
-usage: xbrl_upload.py [-h] --client-id [CLIENT_ID] --secret-key [SECRET_KEY]
-                      --client-name [CLIENT_NAME] --email [EMAIL] --file
-                      [FILE]
+
+usage: xbrl_upload.py
+
+    --client-id [CLIENT_ID]
+
+    --secret-key [SECRET_KEY]
+
+    --client-name [CLIENT_NAME]
+
+    --email [EMAIL]
+
+    --file [FILE]
 
 optional arguments:
+
   -h, --help            show this help message and exit
-  --client-id [CLIENT_ID]
-  --secret-key [SECRET_KEY]
-  --client-name [CLIENT_NAME]
-  --email [EMAIL]
-  --file [FILE]
