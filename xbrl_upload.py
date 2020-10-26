@@ -22,10 +22,10 @@ mac = hex(get_mac())[2:]
 
 
 def zip_file(fname):
-    wd = os.getcwd()
+    wd = os.path.abspath(os.getcwd())
     rel_fname = os.path.basename(fname)
     os.chdir(os.path.dirname(os.path.abspath(fname)))
-    zipname = ''.join(rel_fname.split('.')[:-1]) + '.zip'
+    zipname = os.path.join(wd, ''.join(rel_fname.split('.')[:-1]) + '.zip')
     with zipfile.ZipFile(zipname, "w", zipfile.ZIP_DEFLATED) as compressed:
         compressed.write(rel_fname)
     os.chdir(wd)
@@ -96,7 +96,7 @@ def upload_file(client_id, secret_key, client_name, email, fname, verbose):
     data = {
         "IsBulkUpload": True,
         "lstFiles": [{
-            "OriginalFileName": zipped,
+            "OriginalFileName": os.path.basename(zipped),
             "FileCheckSum": get_checksum(fname),
             "FileBytes": get_b64_content(zipped)
         }],
@@ -144,7 +144,7 @@ def upload_folder(client_id, secret_key, client_name, email, folder, verbose):
     data = {
         "IsBulkUpload": True,
         "lstFiles": [{
-            "OriginalFileName": zipped,
+            "OriginalFileName": os.path.basename(zipped),
             "FileCheckSum": get_checksum_from_zip(zipped),
             "FileBytes": get_b64_content(zipped)
         }],
@@ -162,7 +162,6 @@ def upload_folder(client_id, secret_key, client_name, email, folder, verbose):
         return resp.json()
     except:
         return resp.content.decode()
-
 
 if __name__ == "__main__":
     import argparse
