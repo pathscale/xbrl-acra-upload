@@ -1,5 +1,5 @@
 # xbrl-acra-upload
-xbrl acra upload for osx.
+xbrl acra upload for osx or linux
 
 This tool is meant for IT Admin or those with a strong technical background.
 
