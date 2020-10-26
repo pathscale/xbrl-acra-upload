@@ -67,7 +67,7 @@ def get_checksum_from_zip(zipfname):
 def get_b64_content(zipfname):
     return base64.b64encode(open(zipfname, 'rb').read()).decode()
 
-def upload_file(client_id, secret_key, client_name, email, fname):
+def upload_file(client_id, secret_key, client_name, email, fname, verbose):
     zipped = zip_file(fname)
     headers = {
         "cache-control": "no-cache",
@@ -80,7 +80,8 @@ def upload_file(client_id, secret_key, client_name, email, fname):
     }
     oauth_resp = requests.post('https://www.apimall.acra.gov.sg/authorizeServer/oauth/token',
                                data='grant_type=client_credentials', headers=headers)
-    print(json.dumps(oauth_resp.json(), indent=2))
+    if verbose:
+        print("Response {}: {}".format(oauth_resp.status_code, oauth_resp.content.decode()))
     headers = {
         "Accept": "application/json",
         "token": oauth_resp.json().get('access_token'),
@@ -104,9 +105,14 @@ def upload_file(client_id, secret_key, client_name, email, fname):
     }
     resp = requests.post('https://www.apimall.acra.gov.sg//api/acra/xbrl/MultiUploadFileForValidation', json=data,
                          headers=headers)
-    return resp.json()
+    if verbose:
+        print("Response {}: {}".format(resp.status_code, resp.content.decode()))
+    if resp.status_code == 200:
+        return resp.json()
+    else:
+        return None
 
-def upload_folder(client_id, secret_key, client_name, email, folder):
+def upload_folder(client_id, secret_key, client_name, email, folder, verbose):
     zipped = zip_folder(folder)
     headers = {
         "cache-control": "no-cache",
@@ -119,7 +125,8 @@ def upload_folder(client_id, secret_key, client_name, email, folder):
     }
     oauth_resp = requests.post('https://www.apimall.acra.gov.sg/authorizeServer/oauth/token',
                                data='grant_type=client_credentials', headers=headers)
-    print(json.dumps(oauth_resp.json(), indent=2))
+    if verbose:
+        print("Response {}: {}".format(oauth_resp.status_code, oauth_resp.content.decode()))
     headers = {
         "Accept": "application/json",
         "token": oauth_resp.json().get('access_token'),
@@ -143,7 +150,12 @@ def upload_folder(client_id, secret_key, client_name, email, folder):
     }
     resp = requests.post('https://www.apimall.acra.gov.sg//api/acra/xbrl/MultiUploadFileForValidation', json=data,
                          headers=headers)
-    return resp.json()
+    if verbose:
+        print("Response {}: {}".format(resp.status_code, resp.content.decode()))
+    if resp.status_code == 200:
+        return resp.json()
+    else:
+        return None
 
 
 if __name__ == "__main__":
@@ -157,12 +169,13 @@ if __name__ == "__main__":
     parser.add_argument('--email', action="store", dest="email", nargs='?', const=1, required=True)
     parser.add_argument('--file', action="store", dest="file", nargs='?', const=1)
     parser.add_argument('--folder', action="store", dest="folder", nargs='?', const=1)
+    parser.add_argument('--verbose', action="store_true", dest="verbose", nargs='?', const=1)
     args = parser.parse_args()
     if args.file:
-        resp = upload_file(args.client_id, args.secret_key, args.client_name, args.email, args.file)
+        resp = upload_file(args.client_id, args.secret_key, args.client_name, args.email, args.file, args.verbose)
         print(json.dumps(resp, indent=2))
     elif args.folder:
-        resp = upload_folder(args.client_id, args.secret_key, args.client_name, args.email, args.folder)
+        resp = upload_folder(args.client_id, args.secret_key, args.client_name, args.email, args.folder, args.verbose)
         print(json.dumps(resp, indent=2))
     else:
         print('One of --file or --folder parameters required.')
