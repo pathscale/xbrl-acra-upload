@@ -30,7 +30,7 @@ usage: xbrl_upload.py
 
     --email [EMAIL]
 
-    --file [FILE]
+    --file [FILE] / --folder [FOLDER]
 
 optional arguments:
 

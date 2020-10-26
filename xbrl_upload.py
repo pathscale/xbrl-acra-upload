@@ -155,7 +155,15 @@ if __name__ == "__main__":
     parser.add_argument('--secret-key', action="store", dest="secret_key", nargs='?', const=1, required=True)
     parser.add_argument('--client-name', action="store", dest="client_name", nargs='?', const=1, required=True)
     parser.add_argument('--email', action="store", dest="email", nargs='?', const=1, required=True)
-    parser.add_argument('--file', action="store", dest="file", nargs='?', const=1, required=True)
+    parser.add_argument('--file', action="store", dest="file", nargs='?', const=1)
+    parser.add_argument('--folder', action="store", dest="file", nargs='?', const=1)
     args = parser.parse_args()
-    resp = upload_file(args.client_id, args.secret_key, args.client_name, args.email, args.file)
-    print(json.dumps(resp, indent=2))
+    if args.file:
+        resp = upload_file(args.client_id, args.secret_key, args.client_name, args.email, args.file)
+        print(json.dumps(resp, indent=2))
+    elif args.folder:
+        resp = upload_folder(args.client_id, args.secret_key, args.client_name, args.email, args.folder)
+        print(json.dumps(resp, indent=2))
+    else:
+        print('One of --file or --folder parameters required.')
+
