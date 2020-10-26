@@ -169,7 +169,7 @@ if __name__ == "__main__":
     parser.add_argument('--email', action="store", dest="email", nargs='?', const=1, required=True)
     parser.add_argument('--file', action="store", dest="file", nargs='?', const=1)
     parser.add_argument('--folder', action="store", dest="folder", nargs='?', const=1)
-    parser.add_argument('--verbose', action="store_true", dest="verbose", nargs='?', const=1)
+    parser.add_argument('--verbose', action="store_true", dest="verbose")
     args = parser.parse_args()
     if args.file:
         resp = upload_file(args.client_id, args.secret_key, args.client_name, args.email, args.file, args.verbose)
