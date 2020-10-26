@@ -107,10 +107,10 @@ def upload_file(client_id, secret_key, client_name, email, fname, verbose):
                          headers=headers)
     if verbose:
         print("Response {}: {}".format(resp.status_code, resp.content.decode()))
-    if resp.status_code == 200:
+    try:
         return resp.json()
-    else:
-        return None
+    except:
+        return resp.content.decode()
 
 def upload_folder(client_id, secret_key, client_name, email, folder, verbose):
     zipped = zip_folder(folder)
@@ -152,10 +152,10 @@ def upload_folder(client_id, secret_key, client_name, email, folder, verbose):
                          headers=headers)
     if verbose:
         print("Response {}: {}".format(resp.status_code, resp.content.decode()))
-    if resp.status_code == 200:
+    try:
         return resp.json()
-    else:
-        return None
+    except:
+        return resp.content.decode()
 
 
 if __name__ == "__main__":
@@ -173,10 +173,10 @@ if __name__ == "__main__":
     args = parser.parse_args()
     if args.file:
         resp = upload_file(args.client_id, args.secret_key, args.client_name, args.email, args.file, args.verbose)
-        print(json.dumps(resp, indent=2))
+        print('File uploaded.')
     elif args.folder:
         resp = upload_folder(args.client_id, args.secret_key, args.client_name, args.email, args.folder, args.verbose)
-        print(json.dumps(resp, indent=2))
+        print('Folder uploaded.')
     else:
         print('One of --file or --folder parameters required.')
 
