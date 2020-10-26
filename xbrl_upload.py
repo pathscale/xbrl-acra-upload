@@ -82,6 +82,9 @@ def upload_file(client_id, secret_key, client_name, email, fname, verbose):
                                data='grant_type=client_credentials', headers=headers)
     if verbose:
         print("Response {}: {}".format(oauth_resp.status_code, oauth_resp.content.decode()))
+    if not oauth_resp.json().get('access_token'):
+        print('Error fetching token')
+        return
     headers = {
         "Accept": "application/json",
         "token": oauth_resp.json().get('access_token'),
@@ -127,6 +130,9 @@ def upload_folder(client_id, secret_key, client_name, email, folder, verbose):
                                data='grant_type=client_credentials', headers=headers)
     if verbose:
         print("Response {}: {}".format(oauth_resp.status_code, oauth_resp.content.decode()))
+    if not oauth_resp.json().get('access_token'):
+        print('Error fetching token')
+        return
     headers = {
         "Accept": "application/json",
         "token": oauth_resp.json().get('access_token'),
